@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: demo-light
+  labels:
+    app.kubernetes.io/name: rancher-prime-demo-workloads-light
+    app.kubernetes.io/part-of: rancher-prime-lab

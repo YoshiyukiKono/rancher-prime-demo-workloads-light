@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: traffic-generator
+  namespace: demo-light
+  labels:
+    app: traffic-generator
+    role: traffic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: traffic-generator
+  template:
+    metadata:
+      labels:
+        app: traffic-generator
+        role: traffic
+    spec:
+      containers:
+        - name: curl
+          image: curlimages/curl:8.11.1
+          imagePullPolicy: IfNotPresent
+          command:
+            - sh
+            - -c
+            - |
+              while true; do
+                echo "[traffic] $(date -Iseconds) frontend";
+                curl -sS --max-time 3 http://frontend-nginx >/dev/null || true;
+                echo "[traffic] $(date -Iseconds) backend-get";
+                curl -sS --max-time 3 http://backend-httpbin:8000/get >/dev/null || true;
+                echo "[traffic] $(date -Iseconds) backend-status";
+                curl -sS --max-time 3 -o /dev/null -w "%{http_code}\n" http://backend-httpbin:8000/status/200 || true;
+                sleep 5;
+              done
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi

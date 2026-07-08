@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-httpbin
+  namespace: demo-light
+  labels:
+    app: backend-httpbin
+    role: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-httpbin
+  template:
+    metadata:
+      labels:
+        app: backend-httpbin
+        role: backend
+    spec:
+      containers:
+        - name: httpbin
+          image: kennethreitz/httpbin
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-httpbin
+  namespace: demo-light
+  labels:
+    app: backend-httpbin
+spec:
+  type: ClusterIP
+  selector:
+    app: backend-httpbin
+  ports:
+    - name: http
+      port: 8000
+      targetPort: 80
