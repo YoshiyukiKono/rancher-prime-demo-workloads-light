@@ -107,14 +107,10 @@ curl http://localhost:8081/get
 
 出力は `history/baseline/outputs/` に保存されます。
 
-## 想定環境
+## 確認環境
 
+- Mac
 - Rancher Desktop
 - k3s
-- RKE2
-- Harvester上のVM
-- Proxmox上のVM
-- Ubuntu / SLES
-- Docker engine / containerd
 
-ただし、Kubernetesクラスタからインターネット上の公開コンテナレジストリへアクセスできる必要があります。
+Kubernetesクラスタからインターネット上の公開コンテナレジストリへアクセスできる必要があります。
